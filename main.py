@@ -108,6 +108,13 @@ def menu_condicionales_simples():
     """Sección 3: condicionales simples."""
     print("\n--- Condicionales simples ---")
 
+    casos_mora = [0, 1, 30, 90]
+    
+    for dias in casos_mora:
+        al_dia = esta_al_dia(dias)
+        estado = "Al día" if al_dia else "En mora"
+        print(f"  {dias} días de mora → {estado}")
+
     # TODO: descomenta cuando hayas completado esta_al_dia
     # casos_mora = [0, 1, 30, 90]
     # for dias in casos_mora:
