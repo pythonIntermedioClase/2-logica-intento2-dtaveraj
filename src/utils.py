@@ -441,6 +441,15 @@ def asignar_prioridad(valor, tiene_historial_incumplimiento):
     Returns:
         str: "ALTA", "MEDIA" o "BAJA".
     """
+    valor_alto = valor > 1000000
+    tiene_historial = tiene_historial_incumplimiento
+    if valor_alto and tiene_historial_incumplimiento:
+        return "ALTA"
+    elif valor_alto or tiene_historial_incumplimiento:
+        return "MEDIA"
+    else:
+        return "BAJA"
+    
     # TODO:
     # 1. Evalúa las dos condiciones por separado y guárdalas en variables:
     #    valor_alto = valor > 1_000_000
@@ -449,8 +458,7 @@ def asignar_prioridad(valor, tiene_historial_incumplimiento):
     #    - si valor_alto AND tiene_historial: retorna "ALTA"
     #    - si valor_alto OR tiene_historial: retorna "MEDIA"
     #    - de lo contrario: retorna "BAJA"
-    pass
-
+    
 
 # ---------------------------------------------------------------------------
 # CONDICIONALES ANIDADOS
@@ -469,6 +477,14 @@ def clasificar_mora(dias_mora, valor):
     Returns:
         str: "Mora alta", "Mora baja" o "Sin mora".
     """
+    if dias_mora > 0:
+        if valor > 500000:
+            return "Mora alta"
+        else:
+            return "Mora baja"
+    else:
+        return "Sin mora"
+
     # TODO:
     # 1. Escribe el if externo: si dias_mora > 0 (hay mora)
     #    - Dentro, escribe el if interno: si valor > 500_000
@@ -477,8 +493,6 @@ def clasificar_mora(dias_mora, valor):
     #      retorna "Mora baja"
     # 2. else (no hay mora):
     #    retorna "Sin mora"
-    pass
-
 
 def determinar_tipo_seguimiento(estado, valor, municipio):
     """
@@ -492,6 +506,18 @@ def determinar_tipo_seguimiento(estado, valor, municipio):
     Returns:
         str: Tipo de seguimiento asignado.
     """
+    if estado == "ACTIVO":
+       municipio_prioritario = municipio == "Bogota" or municipio == "Medellin"
+       valor_alto = valor > 2000000
+       if municipio_prioritario and valor_alto:
+           return "Seguimiento prioritario"
+       else:
+           "Seguimiento estándar"
+    elif estado == "PENDIENTE":
+        return "Seguimiento urgente"
+    else:
+        return "Sin seguimiento"
+
     # TODO:
     # 1. Si estado == "ACTIVO":
     #    - Calcula si el municipio es prioritario:
@@ -501,7 +527,6 @@ def determinar_tipo_seguimiento(estado, valor, municipio):
     #    - De lo contrario: retorna "Seguimiento estándar"
     # 2. elif estado == "PENDIENTE": retorna "Seguimiento urgente"
     # 3. else: retorna "Sin seguimiento"
-    pass
 
 
 def evaluar_cumplimiento(estado, valor, dias_mora, historial):
@@ -518,6 +543,21 @@ def evaluar_cumplimiento(estado, valor, dias_mora, historial):
         str: "Cumplimiento total", "Incumplimiento leve",
              "Incumplimiento grave" o "Caso crítico".
     """
+    if estado == "ACTIVO" and dias_mora == 0:
+        return "Cumplimiento total"
+    if estado == "ACTIVO" and dias_mora > 0:
+        if dias_mora <= 30 and not historial:
+            return "Incumplimiento leve"
+        else:
+            return "Incumplimiento grave"
+    if estado == "PENDIENTE" or estado == "SUSPENDIDO":
+        if historial and valor > 1000000:
+            return "Caso crítico"
+        else:
+            return "Incumplimiento grave"
+    else:
+        return "Incumplimiento leve"
+
     # TODO:
     # Usa una serie de if independientes (no anidados entre sí):
     #
@@ -533,7 +573,6 @@ def evaluar_cumplimiento(estado, valor, dias_mora, historial):
     #    - De lo contrario: retorna "Incumplimiento grave"
     #
     # 4. Para cualquier otro caso: retorna "Incumplimiento leve"
-    pass
 
 
 # ---------------------------------------------------------------------------
